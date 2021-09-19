@@ -3,6 +3,7 @@ from os.path import isfile, join
 import os
 from typing import List
 from pathlib import Path
+from shutil import copyfile
 
 def get_folder_name(folder: str) -> str:
     return os.path.basename(folder)
@@ -22,12 +23,9 @@ def list_files(folder: str) -> List[str]:
     files = [f for f in listdir(folder) if isfile(join(folder, f))]
     return files
 
-def move_file(current: str, destination: str):
-    Path(current).rename(destination)
-
 def move_files(paths: List[str], destination: str):
     for path in paths:
-        move_file(path, destination + path.split('\\')[-1])
+        copyfile(path, destination + path.split('\\')[-1])
 
 def divide_train_test(paths: List[str], train_percent: int):
     if (train_percent < 50):

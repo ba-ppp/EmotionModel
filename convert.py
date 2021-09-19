@@ -13,14 +13,20 @@ def convert(folder_image: str, train_percent: int):
     }
 
     sub_folders = list_folder(folder_image)
+    total_files = 0
+    for folder in sub_folders:
+        total_files += len(list_files(folder))
+    total_train_files = round(total_files * train_percent / 100)
+
     for folder in sub_folders:
         emotion_type = get_folder_name(folder)
         files = list_files(folder)
         for file in files:
             # add to data
-            data['type'].append(emotion_type)
-            id = get_filename_without_extension(file)
-            data['id'].append(id)
+            if (total_train_files > 0):
+                data['type'].append(emotion_type)
+                data['id'].append(file)
+                total_train_files -= 1
 
             # move files to input
             paths.append(get_filename_path(folder, file))
